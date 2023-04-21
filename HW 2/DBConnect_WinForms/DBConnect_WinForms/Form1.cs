@@ -1,8 +1,9 @@
-﻿using MySql.Data.MySqlClient;
+﻿using MySqlX.XDevAPI.Relational;
 using System;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 namespace DBConnect_WinForms
 {
@@ -13,7 +14,10 @@ namespace DBConnect_WinForms
         //MySqlProviderFactory factory = null;
         DbConnection connection = null;
         DbProviderFactory factory = null;
+        DataTable dt = null;
         string providerName = "";
+        string personName = null;
+        string personClass = null;
         public Form1()
         {
             InitializeComponent();
@@ -71,29 +75,30 @@ namespace DBConnect_WinForms
             ConnectionString_TextBox.Text = providerName;
         }
 
-        private void CreatePersonButton_Click(object sender, EventArgs e)
+        private async void CreatePersonButton_Click(object sender, EventArgs e)
         {
             connection.ConnectionString = ConnectionString_TextBox.Text.ToString();
-
-            DbDataAdapter adapter = factory.CreateDataAdapter();
-            adapter.SelectCommand = connection.CreateCommand();
-
-            Int16 ClassStatus = FindClass_SQL(adapter, inputPersClass_TB.Text);
-
-            bool inserStatus = InsertNewPerson_SQL(adapter, InputPersName_TB.Text, inputPersClass_TB.Text, ClassStatus);
-
-            if (inserStatus)
+            await Task.Run(() =>
             {
-                adapter.SelectCommand.CommandText = @"SELECT c.Name AS ""Person Name"", cc.ClassName AS ""Class Name"" 
-                                        FROM Characters AS c, CharacterClass AS cc 
-                                        WHERE c.CharacterClassID = cc.ID;";
+                DbDataAdapter adapter = factory.CreateDataAdapter();
+                adapter.SelectCommand = connection.CreateCommand();
+                Int16 ClassStatus = FindClass_SQL(adapter, this.personClass);
 
-                DataTable table = new DataTable();
-                adapter.Fill(table);
-                dataGridView1.DataSource = null;
-                dataGridView1.DataSource = table;
-            }
+                bool inserStatus = InsertNewPerson_SQL(adapter, this.personName, this.personClass, ClassStatus);
 
+                if (inserStatus)
+                {
+                    adapter.SelectCommand.CommandText = @"SELECT c.Name AS ""Person Name"", cc.Name AS ""Class Name"" 
+                                                          FROM Characters AS c, CharactersClass AS cc 
+                                                          WHERE c.CharacterClassId = cc.Id;";
+
+                    DataTable table = new DataTable();
+                    adapter.Fill(table);
+                    dt = table;
+                }
+            });
+            dataGridView1.DataSource = null;
+            dataGridView1.DataSource = dt;
         }
 
         private bool InsertNewPerson_SQL(DbDataAdapter adapter, string PersName, string PersClass, Int16 ClassStatus)
@@ -103,33 +108,28 @@ namespace DBConnect_WinForms
             {
                 if (ClassStatus == 1)
                 {
-                    string SQLInsertPersonCommand = $"INSERT INTO Characters(Name, CharacterClassID) " +
-                        $"SELECT \"{PersName}\", cc.ID " +
-                        $"FROM CharacterClass AS cc WHERE cc.ClassName = \"{PersClass}\";";
+                    string SQLInsertPersonCommand = $"INSERT INTO Characters(Name, CharacterClassId) " +
+                        $"SELECT \"{PersName}\", cc.Id " +
+                        $"FROM CharactersClass AS cc WHERE cc.Name = \"{PersClass}\";";
 
                     adapter.SelectCommand.CommandText = SQLInsertPersonCommand;
                     DataTable table = new DataTable();
                     adapter.Fill(table);
-                    dataGridView1.DataSource = null;
-                    dataGridView1.DataSource = table;
                     //adapter.SelectCommand.ExecuteNonQuery();
                     return true;
                 }
                 else if (ClassStatus == 0)
                 {
-                    string SQLInsertClassCommand = $"INSERT INTO CharacterClass(ClassName)\r\nVALUES (\"{PersClass}\");";
+                    string SQLInsertClassCommand = $"INSERT INTO CharactersClass(Name)\r\nVALUES (\"{PersClass}\");";
 
-                    string SQLInsertPersonCommand = $"INSERT INTO Characters(Name, CharacterClassID)\r\n" +
-                        $"SELECT \"{PersName}\", cc.ID\r\n" +
-                        $"FROM CharacterClass AS cc\r\n" +
-                        $"WHERE cc.ClassName = \"{PersClass}\";";
+                    string SQLInsertPersonCommand = $"INSERT INTO Characters(Name, CharacterClassId)\r\n" +
+                        $"SELECT \"{PersName}\", cc.Id\r\n" +
+                        $"FROM CharactersClass AS cc\r\n" +
+                        $"WHERE cc.Name = \"{PersClass}\";";
                     adapter.SelectCommand.CommandText = SQLInsertClassCommand + "\n" + SQLInsertPersonCommand;
 
                     DataTable table = new DataTable();
                     adapter.Fill(table);
-                    dataGridView1.DataSource = null;
-                    dataGridView1.DataSource = table;
-
                     //adapter.SelectCommand.ExecuteNonQuery();
                     return true;
                 }
@@ -147,13 +147,12 @@ namespace DBConnect_WinForms
 
         private Int16 FindClass_SQL(DbDataAdapter adapter, string ClassType)
         {
-            int counter = -1;
             DbDataReader SQLreader = null;
             adapter.SelectCommand = connection.CreateCommand();
             string FindClassSQLcommand =
-                $"SELECT COUNT(CharacterClass.ClassName) AS \"FindedCLassCount\" " +
-                $"FROM `CharacterClass` " +
-                $"WHERE CharacterClass.ClassName = \"{ClassType}\";";
+                $"SELECT COUNT(CharactersClass.Name) AS \"FindedCLassCount\" " +
+                $"FROM `CharactersClass` " +
+                $"WHERE CharactersClass.Name = \"{ClassType}\";";
             try
             {
                 adapter.SelectCommand.CommandText = FindClassSQLcommand;
@@ -164,9 +163,7 @@ namespace DBConnect_WinForms
                 //}
                 DataTable table = new DataTable();
                 adapter.Fill(table);
-                dataGridView1.DataSource = null;
-                dataGridView1.DataSource = table;
-                if (counter >= 1)
+                if (Convert.ToUInt16(table.Rows[0].ItemArray[0]) >= 1)
                 {
                     return 1; //Such a class exists
                 }
@@ -188,6 +185,16 @@ namespace DBConnect_WinForms
                     SQLreader.Close();
                 }
             }
+        }
+
+        private void InputPersName_TB_TextChanged(object sender, EventArgs e)
+        {
+            this.personName = this.InputPersName_TB.Text;
+        }
+
+        private void inputPersClass_TB_TextChanged(object sender, EventArgs e)
+        {
+            this.personClass = this.inputPersClass_TB.Text;
         }
     }
 }

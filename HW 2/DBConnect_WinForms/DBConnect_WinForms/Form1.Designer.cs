@@ -123,6 +123,7 @@
             this.InputPersName_TB.Name = "InputPersName_TB";
             this.InputPersName_TB.Size = new System.Drawing.Size(166, 22);
             this.InputPersName_TB.TabIndex = 8;
+            this.InputPersName_TB.TextChanged += new System.EventHandler(this.InputPersName_TB_TextChanged);
             // 
             // inputPersClass_TB
             // 
@@ -130,6 +131,7 @@
             this.inputPersClass_TB.Name = "inputPersClass_TB";
             this.inputPersClass_TB.Size = new System.Drawing.Size(166, 22);
             this.inputPersClass_TB.TabIndex = 9;
+            this.inputPersClass_TB.TextChanged += new System.EventHandler(this.inputPersClass_TB_TextChanged);
             // 
             // personNameLab
             // 
