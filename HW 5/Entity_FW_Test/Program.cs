@@ -10,7 +10,18 @@ namespace Entity_FW_Test
         {
             using (DataBase db = new DataBase())
             {
+                Console.WriteLine("\n...Request 1\n");
+                Select_PlayerNames(db);
+
+                Console.WriteLine("\n...Request 2\n");
+                Select_PlayerNameClassName(db);
+
+                Console.WriteLine("\n...Request 3\n");
+                Select_PlaerNameSpellName(db);
+
+                Console.WriteLine("\n...Request 4\n");
                 Select_ClassNameSpellName(db);
+
                 Console.ReadKey();
             }
         }
@@ -23,6 +34,20 @@ namespace Entity_FW_Test
             var result = data.Characters.Select(x => x.Name).ToList();
 
             foreach(var item in result)
+            {
+                Console.WriteLine(item);
+            }
+        }
+
+        public static void Select_PlayerNameClassName(DataBase data)
+        {
+            var result =
+                data.Characters.Select((x) => new Tuple<string, string>(
+                    x.Name,
+                    data.CharactersClass.First((y) => y.Id == x.CharacterClassId).Name)
+                    ).ToList();
+
+            foreach (var item in result)
             {
                 Console.WriteLine(item);
             }
