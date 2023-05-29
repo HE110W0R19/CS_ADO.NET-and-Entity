@@ -7,5 +7,5 @@ build_property.InvariantGlobalization =
 build_property.PlatformNeutralAssembly = 
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
-build_property.RootNamespace = Entity_FW_Test
-build_property.ProjectDir = C:\Users\TuF\Documents\GitHub\CS_ADO.NET-and-Entity\HW 5\Entity_FW_Test\
+build_property.RootNamespace = Characters_Info_WithEntity
+build_property.ProjectDir = C:\Users\TuF\Desktop\Programs\ШАГ\ДЗ ШАГ\ДЗ ADO.NET (C#)\ДЗ 6\Characters_Info_WithEntity\Characters_Info_WithEntity\

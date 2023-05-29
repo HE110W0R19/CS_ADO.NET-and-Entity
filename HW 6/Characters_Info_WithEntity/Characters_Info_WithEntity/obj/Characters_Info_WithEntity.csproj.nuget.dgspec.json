@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\TuF\\Documents\\GitHub\\CS_ADO.NET-and-Entity\\HW 5\\Entity_FW_Test\\Entity_FW_Test.csproj": {}
+    "C:\\Users\\TuF\\Desktop\\Programs\\ШАГ\\ДЗ ШАГ\\ДЗ ADO.NET (C#)\\ДЗ 6\\Characters_Info_WithEntity\\Characters_Info_WithEntity\\Characters_Info_WithEntity.csproj": {}
   },
   "projects": {
-    "C:\\Users\\TuF\\Documents\\GitHub\\CS_ADO.NET-and-Entity\\HW 5\\Entity_FW_Test\\Entity_FW_Test.csproj": {
+    "C:\\Users\\TuF\\Desktop\\Programs\\ШАГ\\ДЗ ШАГ\\ДЗ ADO.NET (C#)\\ДЗ 6\\Characters_Info_WithEntity\\Characters_Info_WithEntity\\Characters_Info_WithEntity.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\TuF\\Documents\\GitHub\\CS_ADO.NET-and-Entity\\HW 5\\Entity_FW_Test\\Entity_FW_Test.csproj",
-        "projectName": "Entity_FW_Test",
-        "projectPath": "C:\\Users\\TuF\\Documents\\GitHub\\CS_ADO.NET-and-Entity\\HW 5\\Entity_FW_Test\\Entity_FW_Test.csproj",
+        "projectUniqueName": "C:\\Users\\TuF\\Desktop\\Programs\\ШАГ\\ДЗ ШАГ\\ДЗ ADO.NET (C#)\\ДЗ 6\\Characters_Info_WithEntity\\Characters_Info_WithEntity\\Characters_Info_WithEntity.csproj",
+        "projectName": "Characters_Info_WithEntity",
+        "projectPath": "C:\\Users\\TuF\\Desktop\\Programs\\ШАГ\\ДЗ ШАГ\\ДЗ ADO.NET (C#)\\ДЗ 6\\Characters_Info_WithEntity\\Characters_Info_WithEntity\\Characters_Info_WithEntity.csproj",
         "packagesPath": "C:\\Users\\TuF\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\TuF\\Documents\\GitHub\\CS_ADO.NET-and-Entity\\HW 5\\Entity_FW_Test\\obj\\",
+        "outputPath": "C:\\Users\\TuF\\Desktop\\Programs\\ШАГ\\ДЗ ШАГ\\ДЗ ADO.NET (C#)\\ДЗ 6\\Characters_Info_WithEntity\\Characters_Info_WithEntity\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\TuF\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -41,6 +41,12 @@
           "targetAlias": "net7.0",
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.5, )"
             },
